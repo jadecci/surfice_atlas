@@ -1,4 +1,4 @@
-function nii_nii2atlas(source)
+function nii_nii2atlas(source, prefix, lutname)
 %convert NIfTI atlas to MZ3 atlas
 % source : indexed NIfTI atlas
 
@@ -14,8 +14,11 @@ end
 if isempty(which('nii_reslice_target'))
     error('Please get spmScripts from GitHub and add to your path'); 
 end
-lutname = '';
-prefix = '';
+if ~exist('lutname', 'var')
+    lutname = '';
+end
+%lutname = '';
+%prefix = '';
 reduce = 0.5;
 interp = 4; %interpolation
 isReverseFace = true;

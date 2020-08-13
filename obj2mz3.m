@@ -33,18 +33,22 @@ for i = 1 : nROI %numel(objs)
    vMerge = [vMerge; v];
      
     
-   i255 = i;
-   if i > 255
-     i255 =  mod(i,255);
-     if i255 == 0
-        i255 = 1;
-        warning('More than 255 regions');
-     end
-   end
+   %i255 = i;
+   %if i > 255
+   %  i255 =  mod(i,255);
+   %  if i255 == 0
+   %     i255 = 1;
+   %     warning('More than 255 regions');
+   %  end
+   %end
    %fprintf('%d RGBA = %g %g %g %g\n', i, lut(i255,1), lut(i255,2), lut(i255,3), lut(i255,4));
-   fprintf('%d RGBA = %g %g %g %g\n', i, 255*lut(i255,1), 255*lut(i255,2), 255*lut(i255,3), 255*lut(i255,4));
+   %fprintf('%d RGBA = %g %g %g %g\n', i, 255*lut(i255,1), 255*lut(i255,2), 255*lut(i255,3), 255*lut(i255,4));
+   if i > 380
+       fprintf('%d RGBA = %g %g %g %g\n', i, 255*lut(i,1), 255*lut(i,2), 255*lut(i,3), 255*lut(i,4));
+   end
    
-   c = repmat(lut(i255,:),size(v,1),1);
+   %c = repmat(lut(i255,:),size(v,1),1);
+   c = repmat(lut(i, :), size(v, 1), 1);
    cMerge = [cMerge; c];
 end
 fprintf('Merged %d meshes with %d faces and %d vertices %s\n',  nROI, size(fMerge,1), size(vMerge,1), outname );
@@ -60,9 +64,9 @@ end
 fileID = fopen(fnm);
 lut = fread(fileID);
 fclose(fileID);
-lut = reshape(lut,256,3);
-lut(1,:) = [];
-lut = [lut, [1:255]']; %RGB->RGBA with A set to index
+lut = reshape(lut, length(lut)/3,3);
+alpha = [1:size(lut, 1)] .* 255 ./ size(lut, 1);
+lut = [lut, alpha']; %RGB->RGBA with A set to index
 lut = lut/255;
 %end getVertexColorSubImageJ()
 
